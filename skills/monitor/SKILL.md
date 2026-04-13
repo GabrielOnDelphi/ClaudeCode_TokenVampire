@@ -9,8 +9,8 @@ disable-model-invocation: true
 Launch ClaudeTokenVampire to monitor your Claude Code 5-hour rolling token window.
 Windows only. Runs as a system-tray app.
 
-```bash
-start "" "${CLAUDE_PLUGIN_ROOT}/bin/ClaudeTokenVampire.exe"
+```powershell
+Start-Process "${CLAUDE_PLUGIN_ROOT}/bin/ClaudeTokenVampire.exe"
 ```
 
 ClaudeTokenVampire shows:
