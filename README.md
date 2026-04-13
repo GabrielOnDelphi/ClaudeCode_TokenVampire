@@ -17,6 +17,10 @@ It puts you in control of your expensive Claude Code tokens:
 - Runs quietly in the **system tray** — click the icon to show/hide
 - **USES 0 TOKENS** — runs entirely offline, no API calls, no Claude queries
 
+## Install
+Install then type _launch vampire_ to see your token usage.
+See "How to install.txt" for details.
+
 ## Views
 
 - **All Projects** — combined rolling 5h view across everything
