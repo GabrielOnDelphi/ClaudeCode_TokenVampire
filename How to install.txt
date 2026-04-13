@@ -1,14 +1,15 @@
-﻿Claude TokenVampire — Installation
+ClaudeTokenVampire — Installation
 =========================
 
-Requirements: Windows, Claude Code CLI
+Requirements: Windows, Claude Code CLI, Node.js (already installed if you have Claude Code)
 
 Install:
   1. Copy this folder somewhere permanent (e.g. C:\Tools\ClaudeTokenVampire-plugin)
-  2. In Claude Code, run:  /plugin install "C:\Tools\ClaudeTokenVampire-plugin"
+  2. Double-click Install.cmd
+  3. In Claude Code, run:  /reload-plugins
 
 Launch:
-  Type /ClaudeTokenVampire:monitor in Claude Code
+  Type /claudetokenvampire:monitor in Claude Code
 
 Uninstall:
-  /plugin uninstall ClaudeTokenVampire
+  Double-click Uninstall.cmd, then /reload-plugins in Claude Code
