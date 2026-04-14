@@ -7,7 +7,7 @@ Install:
   3. In Claude Code, run:  /reload-plugins
 
 Launch (two ways):
-  - Fast:  Type "launch vampire" or "token monitor" in Claude Code (instant, no thinking delay)
+  - Fast:  Type "start vampire", "launch vampire", or "token monitor" in Claude Code (instant, no thinking delay)
   - Skill: Type /claudetokenvampire:monitor in Claude Code (~5 sec, loads full context)
 
 
