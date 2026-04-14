@@ -1,6 +1,6 @@
 ﻿# ClaudeTokenVampire
 
-A system-tray app that monitors your Claude Code token usage in real time.
+An app that monitors your Claude Code token usage in real time.
 Anthropic doesn't tell you how much of your 5-hour rolling quota you've consumed — ClaudeTokenVampire does.
 
 ![ClaudeTokenVampire - Logo](Logo.jpg)
@@ -130,5 +130,9 @@ No tokens are wasted.
 Click the "Star" but ONLY if you think the project deserves it :)
 This will encourage future development. 
 
+In the future: 
+- Move to systray 
+- Show window in "minimal" mode (only show critical info)
+- Beep when getting closer to reach maximum quota
 
 
