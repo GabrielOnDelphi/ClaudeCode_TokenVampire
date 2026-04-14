@@ -147,7 +147,7 @@ function install() {
 
     writeJSON(SETTINGS_FILE, s);
 
-    // 4. known_marketplaces.json — register marketplace with install location
+    // 5. known_marketplaces.json — register marketplace with install location
     const km = readJSON(KNOWN_MKT) || {};
     km[MARKETPLACE] = {
         source: { source: 'directory', path: PLUGIN_DIR },
@@ -156,7 +156,7 @@ function install() {
     };
     writeJSON(KNOWN_MKT, km);
 
-    // 5. installed_plugins.json — register plugin (cache path)
+    // 6. installed_plugins.json — register plugin (cache path)
     const ip = readJSON(INSTALLED) || { version: 2, plugins: {} };
     if (!ip.plugins) ip.plugins = {};
     ip.plugins[PLUGIN_KEY] = [{
@@ -216,20 +216,20 @@ function uninstall() {
     }
     writeJSON(SETTINGS_FILE, s);
 
-    // Remove ps1 helper script
+    // 3. Remove ps1 helper script
     if (fs.existsSync(HOOK_SCRIPT_PATH)) {
         fs.unlinkSync(HOOK_SCRIPT_PATH);
         console.log('  Hook script removed: ' + HOOK_SCRIPT_PATH);
     }
 
-    // 3. known_marketplaces.json — remove marketplace
+    // 4. known_marketplaces.json — remove marketplace
     const km = readJSON(KNOWN_MKT);
     if (km) {
         delete km[MARKETPLACE];
         writeJSON(KNOWN_MKT, km);
     }
 
-    // 4. installed_plugins.json — remove plugin
+    // 5. installed_plugins.json — remove plugin
     const ip = readJSON(INSTALLED);
     if (ip && ip.plugins) {
         delete ip.plugins[PLUGIN_KEY];
