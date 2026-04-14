@@ -7,19 +7,5 @@
     "url": "https://GabrielMoraru.com"
   },
   "platforms": ["win32"],
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "matcher": "launch vampire|start vampire|token monitor|launch tokenvampire|start tokenvampire",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell -NoProfile -Command \"Start-Process '${CLAUDE_PLUGIN_ROOT}/bin/ClaudeTokenVampire.exe'\"",
-            "timeout": 5,
-            "statusMessage": "Launching ClaudeTokenVampire..."
-          }
-        ]
-      }
-    ]
-  }
+  "hooks": {}
 }
