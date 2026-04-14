@@ -1,4 +1,4 @@
-﻿# ClaudeTokenVampire
+﻿# Claude TokenVampire
 
 An app that monitors your Claude Code token usage in real time.
 Anthropic doesn't tell you how much of your 5-hour rolling quota you've consumed — ClaudeTokenVampire does.
@@ -32,14 +32,6 @@ See "How to install.txt" for details.
 - **All Projects** — combined rolling 5h view across everything
 - **Per Project** — same chart broken down by project
 
-## Settings
-
-- Token limit (default 88M — roughly Anthropic's Max plan at 5x usage tier)
-- Cost rates per 1M tokens (input / output / cache read / cache create)
-- Refresh interval (default 60s)
-- Start with Windows
-- etc
-
 ## Requirements
 
 - Windows 10/11
@@ -56,6 +48,36 @@ See "How to install.txt" for details.
 
 The codebase uses FMX (FireMonkey), which is cross-platform. The macOS port mainly requires swapping `%USERPROFILE%\.claude\` for `~/.claude/`.
 
+
+## Safety
+
+- It opens files in read-only shared mode so it never interferes with Claude Code. 
+- Totally local.
+- No data is sent anywhere.
+- No tokens are wasted.
+- No API key required.
+
+
+## Stars are free
+
+Click the "Star" but ONLY if you think the project deserves it :)
+This will encourage future development. 
+
+In the future: 
+- Minimize to systray 
+- Show window in "minimal" mode (only show critical info)
+- Beep when getting closer to reach maximum quota
+- User configurable time per bar (now one bar = 15 minutes)
+- Show waring when you are using Claude during peak hours 
+- Rate limit prediction — project velocity forward: "at this pace, limit in 47 min." 
+- Budget enforcement via hooks
+- Real-time activity indicator — tray icon color change when Claude active.
+- Tool call analytics - "Top 10 tool calls" stat.
+- Session search — keyword search across sessions. 
+- Support for multiple computers (when you use your account in two computers)
+
+
+----
 
 # User manual 
 
@@ -92,12 +114,14 @@ A value label appears above each bar showing the token count for that 15-minute 
 
 **Legend** at the bottom shows the color key.
 
+
 ## Per Project Tab
 
 Left panel: list of projects sorted by total tokens (heaviest first).
 Right panel: same stats and chart, but filtered to the selected project.
 
 Click a project to view its individual stats and hourly chart.
+
 
 ## Settings
 
@@ -112,27 +136,13 @@ Click a project to view its individual stats and hourly chart.
 | Start minimized to tray | off | Hide window on app startup |
 | Start with Windows | off | Launch at Windows login |
 
+![ClaudeTokenVampire - Screenshot](Screenshot Settings.jpg)
+
+
 ## Tips
 
 - **"CACHE COLD" warning**: If you step away for > 5 minutes, the next Claude message will rebuild the prompt cache (costs more tokens). Resume work within 5 min to keep cache warm.
 - **Next expiry**: When this hits 0, your oldest messages roll off and total usage drops. Useful to know if you're near the limit — just wait.
 - **Per-hour chart**: Helps spot usage spikes. A single heavy hour (large bar) suggests a big refactor or long conversation.
 - **Cost estimate**: Approximate. Real billing may differ. Useful for relative comparison.
-
-## Safety
-
-It opens files in read-only shared mode so it never interferes with Claude Code. 
-No data is sent anywhere.
-No tokens are wasted.
-
-## Stars are free
-
-Click the "Star" but ONLY if you think the project deserves it :)
-This will encourage future development. 
-
-In the future: 
-- Move to systray 
-- Show window in "minimal" mode (only show critical info)
-- Beep when getting closer to reach maximum quota
-
 
