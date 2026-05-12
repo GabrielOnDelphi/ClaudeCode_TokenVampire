@@ -48,14 +48,14 @@ It puts you in control of your Claude Code tokens:
 - Cost estimate in USD (four independently configurable $/1M rates)
 - Minutes until session hard-reset (`SessionEnd - Now`)
 - Idle minutes since the last message
-- Cache gap warning (5m and 1h tier cold/warm detection)
+- Cache gap warning with per-tier detection (5m and 1h shown as two separate gradient bars on the cache-status row)
 - Cache tier breakdown: 1h ephemeral vs 5m ephemeral tokens
 - Web search and web fetch counts
 - **7-day total tokens** (true sliding window) with optional weekly cap
 
 ### All Projects Tab
 - Combined stats across all projects
-- Four gradient progress bars: token usage, cache hit rate, session-reset countdown, cache warmth
+- Five gradient progress bars: token usage, cache hit rate, session-reset countdown, cache 1h warmth, cache 5m warmth (last two share the cache-status row side-by-side)
 - Bar chart spanning the current session window (left edge = `SessionStart`, right edge = `SessionEnd`)
 - Configurable bucket width
 - Color-coded bars: green → yellow → orange → red by % of per-slot budget
@@ -65,7 +65,7 @@ It puts you in control of your Claude Code tokens:
 - X-axis with hour offsets (`start`, `+1h`, `+2h`, `+3h`, `+4h`, `end (reset)`)
 - 10% horizontal grid lines; vertical hour-mark grid lines
 - Legend (color key or auto-scale note)
-- Cache status line: shows both 5m and 1h tier state + idle time, color-coded
+- Cache status row: two side-by-side gradient bars (1h tier fills available width, 5m tier fixed-width on the right) plus a short "Xm idle" label — each bar fills as its tier ages toward expiry
 - **Hot hours warning** (13:00-18:59 local time — Anthropic peak-load window, user-reported)
 - Detailed tooltips on every stat label
 
@@ -84,10 +84,10 @@ It puts you in control of your Claude Code tokens:
 
 ### Auto-Ping (Optional, Opt-In)
 - Disabled by default to keep the "0 tokens" promise intact
-- Smart trigger: pings Claude only when no session is active, or when the current session is within 30 minutes of its hard-reset
+- Smart trigger: pings Claude only when no session is active (fires immediately on the first such tick — bypasses the interval gate so an overnight-expired window gets a fresh start at app launch), or when the current session is within 30 minutes of its hard-reset
 - User-configurable interval (30 to 240 minutes, default 60)
 - Spawns `claude -p "hi"` headless via `cmd.exe` — no visible window, detached
-- After 3 consecutive spawn failures it disables itself for the run; auto-re-enables when you re-open Settings
+- After 3 consecutive spawn failures it disables itself for the run; re-arms (clearing the failure latch and re-enabling boundary-fire) when you toggle Auto-Ping back ON in Settings
 - Uses a few tokens per ping (typically <50 output tokens), worth it to start a fresh 5h window before you actually need to work
 
 ### Vote Prompt (One-Time)
