@@ -1,0 +1,12 @@
+# Private working notes — this folder IS the published GitHub repo, so anything
+# not listed here is public the moment it is pushed. Only README.md is the
+# public documentation; CLAUDE.md is for us.
+CLAUDE.md
+
+# Delphi / build leftovers, in case an EXE ever gets built in place
+*.dcu
+*.~*
+__history/
+__recovery/
+Win32_Debug/
+Win32_Release/
