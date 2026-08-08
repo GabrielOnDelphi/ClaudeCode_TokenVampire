@@ -22,11 +22,13 @@ It puts you in control of your Claude Code tokens:
 - Tracks **all billable token types**: input, output, cache creation, cache reads
 - Shows the **current 5-hour session** with a per-bucket bar chart from `session_start → session_end`
 - Color-coded bars: green → yellow → red as you approach your limit
-- Estimates **cost** (configurable $/1M token rates)
+- Estimates **cost per model** — Opus, Sonnet, Haiku and Fable are each priced at their own rate, and a "Models used" row shows the mix
+- Shows Anthropic's **own** percentage next to the local one, read from Claude Code's statusline (Pro/Max only)
 - Shows **cache hit rate** and warns when the 5-minute cache gap expires
 - Counts down until the session **hard-resets** (all tokens reset at once, not gradually)
 - Tracks the **7-day weekly cap** with its own configurable limit and ratio bar
-- **Top tool calls** — a third tab ranks the tools your sessions hit most over the last 7 days, with calls / cost / avg duration
+- **Top tool calls** — ranks the tools your sessions hit most over the last 7 days, with calls / cost / avg duration
+- **Recent sessions** — lists your latest Claude Code sessions, lets you read one, and reopens it in its own terminal. Written after a power failure killed eleven sessions at once
 - Runs quietly in the **system tray** — click the icon to show/hide
 - **USES 0 TOKENS by default** — runs entirely offline, no API calls, no Claude queries (the optional auto-ping feature is opt-in and uses a few tokens per ping)
 
@@ -66,7 +68,7 @@ It puts you in control of your Claude Code tokens:
 - 10% horizontal grid lines; vertical hour-mark grid lines
 - Legend (color key or auto-scale note)
 - Cache status row: two side-by-side gradient bars (1h tier fills available width, 5m tier fixed-width on the right) plus a short "Xm idle" label — each bar fills as its tier ages toward expiry
-- **Hot hours warning** (13:00-18:59 local time — Anthropic peak-load window, user-reported)
+- **Models used** row: the model mix for the session, largest share first, with each model's own cost
 - Detailed tooltips on every stat label
 
 ### Per Project Tab
@@ -77,10 +79,22 @@ It puts you in control of your Claude Code tokens:
 
 ### Tools Tab
 - Top-10 tool calls over the last 7 days
-- Three sortable columns: **Calls** / **Cost (est.)** / **Avg ms**
+- Three columns: **Calls** / **Cost (est.)** / **Avg ms**, each resizable
 - Lazy refresh: scan only fires when you open the tab — never burns CPU in the background
-- Cost attribution: each turn's output tokens split evenly across the turn's tool_uses
+- Cost attribution: each turn's output tokens split evenly across the turn's tool_uses, priced at **that turn's model's** output rate
 - Pairs `tool_use` and `tool_result` JSONL entries for accurate duration measurement
+
+### Recent Sessions Tab
+
+Born from a real power failure that killed eleven open sessions at once. The transcripts survive that; the terminals do not.
+
+- Lists your most recently used Claude Code sessions, **newest first** — so everything one crash killed shows up as a tight band at the top
+- **Read a session**: click a row and its conversation appears below the grid. Tool calls, tool results, thinking blocks and system reminders are stripped out, so what you see is what was actually said
+- **Reopen a session**: double-click a row (or press the button) and it comes back in its own terminal, in its original folder, via `claude --resume`
+- Hover a row for the full working-directory path
+- The session you are currently talking to is shown but refused for reopen — two Claude Code windows on one transcript is not something you want
+- Choose how many sessions to list (5 to 200, remembered between runs)
+- Subagent transcripts are excluded: they look like sessions but cannot be resumed
 
 ### Auto-Ping (Optional, Opt-In)
 - Disabled by default to keep the "0 tokens" promise intact
