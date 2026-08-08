@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "claudetokenvampire",
-  "description": "Monitor Claude Code's 5-hour session token usage from the system tray",
+  "description": "Monitor Claude Code's 5-hour session token usage from the system tray, and reopen sessions a crash killed",
   "owner": {
     "name": "Gabriel Moraru",
     "url": "https://GabrielMoraru.com"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "claudetokenvampire",
-      "description": "Monitor Claude Code's 5-hour session token usage from the system tray",
+      "description": "Monitor Claude Code's 5-hour session token usage from the system tray, and reopen sessions a crash killed",
       "source": "./",
       "category": "productivity"
     }
