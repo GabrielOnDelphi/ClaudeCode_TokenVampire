@@ -1,7 +1,7 @@
 {
   "name": "claudetokenvampire",
-  "description": "Monitor Claude Code's 5-hour session token usage from the system tray. Per-project breakdown, cache hit rate, cost estimate, 7-day cap, pace projection, peak-hours warning. Local-only, zero tokens.",
-  "version": "1.0.1",
+  "description": "Monitor Claude Code's 5-hour session token usage from the system tray. Per-project breakdown, per-model cost, cache hit rate, 7-day cap, pace projection, top tool calls, and a Recent-sessions tab that reads and reopens sessions a crash killed. Local-only, zero tokens.",
+  "version": "1.1.0",
   "author": {
     "name": "Gabriel Moraru",
     "url": "https://GabrielMoraru.com"
