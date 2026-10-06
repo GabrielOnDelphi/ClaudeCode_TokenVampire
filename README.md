@@ -12,7 +12,7 @@ Anthropic doesn't show you how much of your current 5-hour session quota you've 
 
 **Session-based, not sliding.** Your 5-hour clock starts on your first message and runs for exactly 5 hours regardless of activity, at which point the counter hard-resets. The next session starts on the first message after that reset. Anthropic uses the word "rolling" in their docs but means "cycles session-to-session", not "continuously sliding".
 
-Source: [Anthropic support article 12429409](https://support.claude.com/en/articles/12429409-manage-extra-usage-for-paid-claude-plans) — *"if you hit your limit at 2 PM, your next allocation begins at 7 PM, then 12 AM, and so on."*
+Source: [Anthropic support article 12429409](https://support.claude.com/en/articles/12429409-manage-extra-usage-for-paid-claude-plans) — *"Your plan's included usage limit will reset every five hours once you reach it."*
 
 ![ClaudeTokenVampire - Screenshot](ScreenShot.jpg)
 
@@ -23,31 +23,36 @@ It puts you in control of your Claude Code tokens:
 - Shows the **current 5-hour session** with a per-bucket bar chart from `session_start → session_end`
 - Color-coded bars: green → yellow → red as you approach your limit
 - Estimates **cost per model** — Opus, Sonnet, Haiku and Fable are each priced at their own rate, and a "Models used" row shows the mix
-- Shows Anthropic's **own** percentage next to the local one, read from Claude Code's statusline (Pro/Max only)
+- Shows Anthropic's **own** percentage, read from Claude Code's statusline (Pro/Max only). By default it leads the 5-hour bar and the weekly row, because it counts your whole account (every PC, claude.ai); this PC's own count is shown beside it. Settings > "Main bar shows" switches the bar to this PC's count
+- Counts **each reply once** — Claude Code writes one reply as several log lines, and counting every line made totals about 2.5x too high before version 1.2.0
 - Shows **cache hit rate** and warns when the 5-minute cache gap expires
 - Counts down until the session **hard-resets** (all tokens reset at once, not gradually)
 - Tracks the **7-day weekly cap** with its own configurable limit and ratio bar
 - **Top tool calls** — ranks the tools your sessions hit most over the last 7 days, with calls / cost / avg duration
-- **Recent sessions** — lists your latest Claude Code sessions, lets you read one, and reopens it in its own terminal. Written after a power failure killed eleven sessions at once
+- **Recent sessions** — lists your latest Claude Code sessions with their `/rename` names, lets you read one, and reopens it in its own terminal. Written after a power failure killed eleven sessions at once
+- Scans in the background with a disk cache, so the window never freezes, even with gigabytes of session logs
 - Runs quietly in the **system tray** — click the icon to show/hide
-- **USES 0 TOKENS by default** — runs entirely offline, no API calls, no Claude queries (the optional auto-ping feature is opt-in and uses a few tokens per ping)
+- **USES 0 TOKENS by default** — runs entirely offline, no API calls, no Claude queries (the optional auto-ping feature is opt-in and costs tokens on every ping, see below)
 
 ## Features
 
 ### Data Engine
 - Parses all billable token types: input, output, cache creation, cache read
 - Sorts entries by timestamp; skips non-`assistant` entries
+- One entry per reply (`message.id` + `requestId`), even when Claude Code writes the reply as several lines or a subagent log repeats it
+- Reads session logs whose full path is longer than 260 characters
+- Reads only the bytes appended since the last scan; logs untouched for more than 8 days are skipped
 - **Detects the current 5-hour session**: first message where no predecessor exists within 5h; session runs for exactly 5h from there
 - Aggregates only entries inside `[SessionStart, SessionEnd]` — matches what Anthropic counts
 - Per-project breakdown, sorted descending by token usage
 - Configurable bucket width (2-60 minutes per chart bar)
 
 ### Computed Stats (per session, global and per-project)
-- Total tokens: input + output + cache creation + cache read
+- Total tokens: input + output + cache creation + 10% of cache read (an estimate: Anthropic does not publish how cache reads count against the quota)
 - Per-type token breakdown
 - Message count (assistant turns) in current session
 - Cache hit rate: `cache_read / (cache_read + input)`
-- Cost estimate in USD (four independently configurable $/1M rates)
+- Cost estimate in USD, each reply priced at its own model's published rate; four configurable $/1M rates cover models the app does not know yet
 - Minutes until session hard-reset (`SessionEnd - Now`)
 - Idle minutes since the last message
 - Cache gap warning with per-tier detection (5m and 1h shown as two separate gradient bars on the cache-status row)
@@ -92,17 +97,21 @@ Born from a real power failure that killed eleven open sessions at once. The tra
 - **Read a session**: click a row and its conversation appears below the grid. Tool calls, tool results, thinking blocks and system reminders are stripped out, so what you see is what was actually said
 - **Reopen a session**: double-click a row (or press the button) and it comes back in its own terminal, in its original folder, via `claude --resume`
 - Hover a row for the full working-directory path
-- The session you are currently talking to is shown but refused for reopen — two Claude Code windows on one transcript is not something you want
+- A session that is still running is marked `running now`; reopening it asks you first — two Claude Code windows on one transcript is not something you want
+- Shows the name you gave a session with `/rename`
+- Headless runs (`claude -p`, Agent SDK) are hidden unless you tick "Show automated sessions"
 - Choose how many sessions to list (5 to 200, remembered between runs)
 - Subagent transcripts are excluded: they look like sessions but cannot be resumed
 
 ### Auto-Ping (Optional, Opt-In)
 - Disabled by default to keep the "0 tokens" promise intact
-- Smart trigger: pings Claude only when no session is active (fires immediately on the first such tick — bypasses the interval gate so an overnight-expired window gets a fresh start at app launch), or when the current session is within 30 minutes of its hard-reset
+- Smart trigger: pings Claude only when no session is active (fires immediately on the first such tick — bypasses the interval gate), or when the current session is within 30 minutes of its hard-reset
 - User-configurable interval (30 to 240 minutes, default 60)
-- Spawns `claude -p "hi"` headless via `cmd.exe` — no visible window, detached
+- Spawns `claude -p --model haiku "hi"` headless via `cmd.exe` — no visible window, detached
+- The ping runs with your hooks switched off (`disableAllHooks`), so no beep and no window jumps to the front; hooks forced by an administrator policy still run
+- The ping does not inherit TokenVampire's own Claude Code session variables, so it saves its transcript and its tokens show up in the totals
 - After 3 consecutive spawn failures it disables itself for the run; re-arms (clearing the failure latch and re-enabling boundary-fire) when you toggle Auto-Ping back ON in Settings
-- Uses a few tokens per ping (typically <50 output tokens), worth it to start a fresh 5h window before you actually need to work
+- Costs real tokens: each ping is a full Claude Code start, which still loads your CLAUDE.md files. One measured ping used about 44,000 tokens (almost all of it cache traffic, not the reply), now billed at the Haiku rate
 
 ### Vote Prompt (One-Time)
 - After your 3rd launch, asks once whether you want to help shape the next feature
@@ -130,6 +139,7 @@ Born from a real power failure that killed eleven open sessions at once. The tra
 - **All Projects** — combined current-session view across everything
 - **Tools** — Top-10 tool calls over the last 7 days
 - **Per Project** — same chart broken down by project
+- **Recent sessions** — your latest sessions, to read or reopen
 
 ## Install
 
@@ -163,7 +173,7 @@ The codebase uses FMX (FireMonkey), which is cross-platform. The macOS port main
 - Opens files in read-only shared mode — never interferes with Claude Code.
 - Totally local.
 - No data is sent anywhere.
-- No tokens are wasted (auto-ping is opt-in and uses only a handful per ping when enabled).
+- No tokens are wasted (auto-ping is opt-in; when enabled, each ping costs tokens).
 - No API key required.
 
 ## Documentation
